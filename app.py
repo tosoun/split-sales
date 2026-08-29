@@ -366,23 +366,14 @@ try:
     }}
     
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
+    .content-wrapper {{ padding: 25px; }}
     
-    /* Sticky header section: NEVER sticky (completely static/normal flow) */
-    .sticky-header-wrap {{
-        display: block;
-        position: static;
-        background: rgba(44, 62, 80, 0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 15px 25px;
-    }}
-
+    /* Header layout with info on left and rotating phone on right, hiding in landscape */
     .header-area {{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 100%;
+        margin-bottom: 20px;
     }}
     
     .top-left-area {{ text-align: left; }}
@@ -404,13 +395,11 @@ try:
         filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
     }}
 
-    @media (max-aspect-ratio: 1/1) {{
+    @media (orientation: landscape) {{
         .rotate-hint-right {{
             display: none !important;
         }}
     }}
-
-    .content-wrapper {{ padding: 25px; }}
 
     .columns-container {{ 
         display: grid; 
@@ -420,18 +409,7 @@ try:
     }}
     .product-column {{ width: 100%; }}
 
-    .sub-title {{ 
-        color: #3498db; 
-        font-size: 18px; 
-        margin-bottom: 15px; 
-        font-weight: 700; 
-        text-transform: uppercase; 
-        letter-spacing: 1px; 
-        text-align: center;
-        position: static;
-        background: transparent;
-        padding: 0 0 15px 0;
-    }}
+    .sub-title {{ color: #3498db; font-size: 18px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }}
     
     .poll-item {{ background: rgba(255, 255, 255, 0.08); padding: 12px 18px; border-radius: 12px; margin-bottom: 12px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.1); }}
     
@@ -450,8 +428,11 @@ try:
     
     <div class="main-container">
         <img src="{img_src}" class="banner-img" alt="banner">
-        
-        <div class="sticky-header-wrap">
+        <div class="content-wrapper">
+            <audio id="cheerAudio" preload="auto">
+                <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
+            </audio>
+
             <div class="header-area">
                 <div class="top-left-area">
                     <div class="top-left-text">ΤΟΜΕΑΣ 3</div>
@@ -462,12 +443,6 @@ try:
                     <span class="phone-icon-wrap">📱</span>
                 </div>
             </div>
-        </div>
-
-        <div class="content-wrapper">
-            <audio id="cheerAudio" preload="auto">
-                <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
-            </audio>
 
             <div class="columns-container">
     """
