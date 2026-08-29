@@ -4,7 +4,6 @@ import glob
 import json
 import os
 import pandas as pd
-import requests
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -374,18 +373,37 @@ try:
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
-    /* Εικονίδιο κινητού που κινείται πάντα, χωρίς να εξαφανίζεται σε οριζόντια θέση */
+    /* Mobile turn instruction that hides in landscape orientation */
     .rotate-hint {{
-        display: block;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
         margin-bottom: 15px;
     }}
+    
     .phone-icon-wrap {{
         display: inline-block;
-        font-size: 28px;
+        font-size: 26px;
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
         filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.6));
+    }}
+
+    .rotate-text {{
+        color: #3498db;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }}
+
+    /* Media query to hide completely when in landscape view (width greater than height) */
+    @media (orientation: landscape) {{
+        .rotate-hint {{
+            display: none !important;
+        }}
     }}
 
     .columns-container {{ 
@@ -428,6 +446,7 @@ try:
 
             <div class="rotate-hint">
                 <span class="phone-icon-wrap">📱</span>
+                <span class="rotate-text">turn mobile</span>
             </div>
 
             <div class="columns-container">
