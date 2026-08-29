@@ -128,7 +128,7 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
 
     with col_confetti:
       confetti_choice = st.radio(
-          "Κομφετί:", ["ΝΑΙ", "ΟΧΙ"], index=0 if confetti_enabled else 1, horizontal=True
+          "Κομφετί:", ["ΝΑΙ", "ΟΧΙ"], index=0 if confetti_enabled else 1, horizontal=True, key="conf_radio"
       )
 
     with col_cheer:
@@ -137,14 +137,15 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
           ["ΝΑΙ", "ΟΧΙ"],
           index=0 if cheer_enabled else 1,
           horizontal=True,
+          key="cheer_radio"
       )
 
-    st.markdown("---")
-    # Κουμπί υποβολής που περιμένει να πατηθεί αφού μπουν και τα δύο αρχεία
-    submit_btn = st.button("🚀 Ανέβασμα και των 2 αρχείων")
-
-    if submit_btn:
-      if uploaded_file_1 is not None and uploaded_file_2 is not None:
+    # Αυτόματος έλεγχος και ανέβασμα μόλις συμπληρωθούν και τα δύο αρχεία
+    if uploaded_file_1 is not None and uploaded_file_2 is not None:
+      # Αποφεύγουμε τα πολλαπλή συνεχή uploads αν δεν έχουν αλλάξει τα αρχεία κρατώντας hash/id στη session_state
+      upload_signature = f"{uploaded_file_1.name}_{uploaded_file_2.name}_{uploaded_file_1.size}_{uploaded_file_2.size}"
+      
+      if st.session_state.get("last_uploaded_sig") != upload_signature:
         try:
           gh_token = st.secrets["GITHUB_TOKEN"]
           repo_name = st.secrets["REPO_NAME"]
@@ -188,25 +189,20 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
               time_path, repo_name, gh_token, "Auto-update upload time"
           )
 
-        st.success(
-            "Και τα δύο αρχεία ανέβηκαν, αποθηκεύτηκαν και συγχρονίστηκαν"
-            " επιτυχώς!"
-        )
+        st.session_state["last_uploaded_sig"] = upload_signature
+        st.success("Και τα δύο αρχεία ανέβηκαν αυτόματα και συγχρονίστηκαν επιτυχώς!")
+        
         components.html(
             """
-                    <script>
-                        setTimeout(function() {
-                            window.parent.location.reload();
-                        }, 1500);
-                    </script>
-                """,
+                <script>
+                    setTimeout(function() {
+                        window.parent.location.reload();
+                    }, 1500);
+                </script>
+            """,
             height=0,
         )
-      else:
-        st.warning(
-            "⚠️ Παρακαλώ επιλέξτε αρχείο **και για τα δύο** προϊόντα πριν"
-            " πατήσετε το ανέβασμα!"
-        )
+
   elif password:
     st.error("Λάθος κωδικός!")
 
