@@ -79,14 +79,20 @@ if os.path.exists(cheer_path):
 with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
   password = st.text_input("Εισάγετε κωδικό διαχειριστή:", type="password")
   if password == "2845":
-    product_choice = st.selectbox(
-        "Επιλέξτε Προϊόν για ανέβασμα:",
-        ["Προϊόν 1 (product1_sales.xlsx)", "Προϊόν 2 (product2_sales.xlsx)"],
-    )
-    uploaded_file = st.file_uploader(
-        "Σύρετε το νέο αρχείο πωλήσεων εδώ:", type=["xlsx"]
-    )
+    st.markdown("---")
+    # Δημιουργία δύο στηλών για τα δύο uploaders
+    col_up1, col_up2 = st.columns(2)
 
+    with col_up1:
+      uploaded_file_1 = st.file_uploader(
+          "Αρχείο για Προϊόν 1 (product1_sales.xlsx):", type=["xlsx"]
+      )
+    with col_up2:
+      uploaded_file_2 = st.file_uploader(
+          "Αρχείο για Προϊόν 2 (product2_sales.xlsx):", type=["xlsx"]
+      )
+
+    st.markdown("---")
     time_options = []
     for hour in range(8, 23):
       for minute in (0, 30):
@@ -130,15 +136,13 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
           horizontal=True,
       )
 
-    if uploaded_file is not None:
-      target_path = (
-          excel_path_1
-          if "Προϊόν 1" in product_choice
-          else excel_path_2
-      )
-      file_bytes = uploaded_file.getbuffer()
-      with open(target_path, "wb") as f:
-        f.write(file_bytes)
+    # Έλεγχος αν ανέβηκε έστω και ένα αρχείο
+    if uploaded_file_1 is not None or uploaded_file_2 is not None:
+      try:
+        gh_token = st.secrets["GITHUB_TOKEN"]
+        repo_name = st.secrets["REPO_NAME"]
+      except Exception:
+        gh_token, repo_name = None, None
 
       current_time_str = selected_time.strftime("%H:%M")
       with open(time_path, "w", encoding="utf-8") as tf:
@@ -150,21 +154,44 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
       with open(cheer_path, "w", encoding="utf-8") as ch:
         ch.write(str(cheer_choice == "ΝΑΙ"))
 
-      try:
-        gh_token = st.secrets["GITHUB_TOKEN"]
-        repo_name = st.secrets["REPO_NAME"]
-        upload_to_github(target_path, repo_name, gh_token, f"Auto-update {target_path}")
-        upload_to_github(time_path, repo_name, gh_token, "Auto-update upload time")
-      except Exception:
-        pass
+      updated_files = []
 
-      st.success(f"Το αρχείο {target_path} ενημερώθηκε και συγχρονίστηκε επιτυχώς!")
+      if uploaded_file_1 is not None:
+        with open(excel_path_1, "wb") as f:
+          f.write(uploaded_file_1.getbuffer())
+        if gh_token and repo_name:
+          upload_to_github(
+              excel_path_1,
+              repo_name,
+              gh_token,
+              "Auto-update product1_sales.xlsx",
+          )
+        updated_files.append("Προϊόν 1")
+
+      if uploaded_file_2 is not None:
+        with open(excel_path_2, "wb") as f:
+          f.write(uploaded_file_2.getbuffer())
+        if gh_token and repo_name:
+          upload_to_github(
+              excel_path_2,
+              repo_name,
+              gh_token,
+              "Auto-update product2_sales.xlsx",
+          )
+        updated_files.append("Προϊόν 2")
+
+      if gh_token and repo_name:
+        upload_to_github(time_path, repo_name, gh_token, "Auto-update upload time")
+
+      st.success(
+          f"Επιτυχής ενημέρωση για: {', '.join(updated_files)} και συγχρονισμός!"
+      )
       components.html(
           """
                 <script>
                     setTimeout(function() {
                         window.parent.location.reload();
-                    }, 1000);
+                    }, 1500);
                 </script>
             """,
           height=0,
@@ -280,7 +307,6 @@ if os.path.exists(time_path):
   except Exception:
     pass
 
-# Φόρτωση και επεξεργασία και των 2 προϊόντων
 title_1, df_stores_1, total_sum_1, max_sales_1 = process_sales_df(
     load_data(excel_path_1)
 )
@@ -393,7 +419,7 @@ try:
 
       if index == 0:
         html_content += f"""
-                <div class="poll-item" id="first-store-card-1">
+                <div class="poll-item">
                     <div class="poll-info">
                         <span><b>{katastima}</b></span>
                         <span class="win-number-first">{formatted_num} τμχ/κιλ</span>
@@ -432,7 +458,7 @@ try:
     html_content += (
         '<div style="color: white; padding: 20px;">Δεν βρέθηκαν δεδομένα.</div>'
     )
-  html_content += "</div>"  # Τέλος στήλης 1
+  html_content += "</div>"
 
   # --- ΣΤΗΛΗ 2 ---
   html_content += '<div class="product-column">'
@@ -453,7 +479,7 @@ try:
 
       if index == 0:
         html_content += f"""
-                <div class="poll-item" id="first-store-card-2">
+                <div class="poll-item">
                     <div class="poll-info">
                         <span><b>{katastima}</b></span>
                         <span class="win-number-first">{formatted_num} τμχ/κιλ</span>
@@ -492,9 +518,9 @@ try:
     html_content += (
         '<div style="color: white; padding: 20px;">Δεν βρέθηκαν δεδομένα.</div>'
     )
-  html_content += "</div>"  # Τέλος στήλης 2
+  html_content += "</div>"
 
-  html_content += "</div>"  # Τέλος columns-container
+  html_content += "</div>"
 
   if confetti_enabled:
     html_content += """
