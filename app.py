@@ -140,7 +140,6 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
           key="cheer_radio"
       )
 
-    # Αυτόματος έλεγχος και ανέβασμα μόλις συμπληρωθούν και τα δύο αρχεία
     if uploaded_file_1 is not None and uploaded_file_2 is not None:
       upload_signature = f"{uploaded_file_1.name}_{uploaded_file_2.name}_{uploaded_file_1.size}_{uploaded_file_2.size}"
       
@@ -161,7 +160,6 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
         with open(cheer_path, "w", encoding="utf-8") as ch:
           ch.write(str(cheer_choice == "ΝΑΙ"))
 
-        # Αποθήκευση και αποστολή Προϊόντος 1
         with open(excel_path_1, "wb") as f:
           f.write(uploaded_file_1.getbuffer())
         if gh_token and repo_name:
@@ -172,7 +170,6 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
               "Auto-update product1_sales.xlsx",
           )
 
-        # Αποθήκευση και αποστολή Προϊόντος 2
         with open(excel_path_2, "wb") as f:
           f.write(uploaded_file_2.getbuffer())
         if gh_token and repo_name:
@@ -370,8 +367,15 @@ try:
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
-    .columns-container {{ display: flex; gap: 20px; width: 100%; flex-wrap: wrap; }}
-    .product-column {{ flex: 1; min-width: 280px; }}
+    /* Χρήση CSS Grid με auto-fit: Αν ο χώρος είναι στενός (κάθετη οθόνη κινητού) μπαίνουν κάτω από το άλλο. 
+       Μόλις ο χώρος ανοίξει (οριζόντια οθόνη / tablet / PC) έρχονται αυτόματα πλάι-πλάι! */
+    .columns-container {{ 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+        gap: 20px; 
+        width: 100%; 
+    }}
+    .product-column {{ width: 100%; }}
 
     .sub-title {{ color: #3498db; font-size: 18px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }}
     
@@ -388,18 +392,6 @@ try:
     .total-item {{ background: rgba(52, 152, 219, 0.25); border: 1px solid #3498db; }}
     
     .watermark {{ text-align: right; color: rgba(255, 255, 255, 0.2); font-size: 10px; letter-spacing: 1px; margin-top: 15px; margin-right: 5px; text-transform: uppercase; user-select: none; }}
-
-    /* Responsive adjustments: 
-       - Σε κινητά σε ΚΑΘΕΤΗ διάταξη (portrait) μπαίνουν το ένα κάτω από το άλλο.
-       - Σε κινητά σε ΟΡΙΖΟΝΤΙΑ διάταξη (landscape) ή σε μεγαλύτερες οθόνες (PC/Tablet) μένουν ΠΛΑΪ-ΠΛΑΪ.
-    */
-    @media (max-width: 900px) and (orientation: portrait) {{
-        .columns-container {{ flex-direction: column; gap: 15px; }}
-        .product-column {{ width: 100%; min-width: 0; }}
-        .content-wrapper {{ padding: 12px; }}
-        .poll-info {{ font-size: 14px; }}
-        .sub-title {{ font-size: 16px; margin-top: 10px; }}
-    }}
     </style>
     
     <div class="main-container">
