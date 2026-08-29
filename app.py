@@ -366,14 +366,31 @@ try:
     }}
     
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
-    .content-wrapper {{ padding: 25px; }}
     
-    /* Header layout with info on left and rotating phone on right, hiding in landscape */
+    /* Sticky header section: visible ONLY in portrait mode (when height > width) */
+    .sticky-header-wrap {{
+        display: none;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(44, 62, 80, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px 25px;
+    }}
+
+    @media (max-aspect-ratio: 1/1) {{
+        .sticky-header-wrap {{
+            display: block;
+        }}
+    }}
+
     .header-area {{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        width: 100%;
     }}
     
     .top-left-area {{ text-align: left; }}
@@ -395,11 +412,13 @@ try:
         filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
     }}
 
-    @media (orientation: landscape) {{
+    @media (min-aspect-ratio: 1/1) {{
         .rotate-hint-right {{
             display: none !important;
         }}
     }}
+
+    .content-wrapper {{ padding: 25px; }}
 
     .columns-container {{ 
         display: grid; 
@@ -428,11 +447,8 @@ try:
     
     <div class="main-container">
         <img src="{img_src}" class="banner-img" alt="banner">
-        <div class="content-wrapper">
-            <audio id="cheerAudio" preload="auto">
-                <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
-            </audio>
-
+        
+        <div class="sticky-header-wrap">
             <div class="header-area">
                 <div class="top-left-area">
                     <div class="top-left-text">ΤΟΜΕΑΣ 3</div>
@@ -443,6 +459,12 @@ try:
                     <span class="phone-icon-wrap">📱</span>
                 </div>
             </div>
+        </div>
+
+        <div class="content-wrapper">
+            <audio id="cheerAudio" preload="auto">
+                <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
+            </audio>
 
             <div class="columns-container">
     """
