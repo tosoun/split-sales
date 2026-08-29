@@ -367,23 +367,15 @@ try:
     
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
     
-    /* Sticky header section: visible ONLY in landscape mode (when width > height) */
+    /* Sticky header section: NEVER sticky (completely static/normal flow) */
     .sticky-header-wrap {{
-        display: none;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
+        display: block;
+        position: static;
         background: rgba(44, 62, 80, 0.95);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         padding: 15px 25px;
-    }}
-
-    @media (min-aspect-ratio: 1/1) {{
-        .sticky-header-wrap {{
-            display: block;
-        }}
     }}
 
     .header-area {{
@@ -436,19 +428,9 @@ try:
         text-transform: uppercase; 
         letter-spacing: 1px; 
         text-align: center;
-        position: sticky;
-        top: 0;
-        background: rgba(44, 62, 80, 0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: 10px 0;
-        z-index: 900;
-    }}
-
-    @media (min-aspect-ratio: 1/1) {{
-        .sub-title {{
-            top: 75px; /* Adjust according to top sticky header height */
-        }}
+        position: static;
+        background: transparent;
+        padding: 0 0 15px 0;
     }}
     
     .poll-item {{ background: rgba(255, 255, 255, 0.08); padding: 12px 18px; border-radius: 12px; margin-bottom: 12px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.1); }}
