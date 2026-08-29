@@ -374,33 +374,23 @@ try:
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
-    /* Κινούμενο μήνυμα προτροπής οριζόντιας θέασης με ομαλή εναλλαγή κάθετου/οριζόντιου */
+    /* Μόνο το κινούμενο εικονίδιο κινητού, εμφανίζεται σε πορτραίτα και εξαφανίζεται αυτόματα σε landscape */
     .rotate-hint {{
         display: none;
-        background: rgba(52, 152, 219, 0.25);
-        border: 1px solid #3498db;
-        border-radius: 12px;
-        padding: 10px 15px;
-        margin-bottom: 20px;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        text-align: center;
+        margin-bottom: 15px;
     }}
     .phone-icon-wrap {{
         display: inline-block;
-        font-size: 20px;
+        font-size: 28px;
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
+        filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.6));
     }}
 
     @media screen and (max-width: 768px) and (orientation: portrait) {{
         .rotate-hint {{
-            display: flex;
+            display: block;
         }}
     }}
 
@@ -444,7 +434,6 @@ try:
 
             <div class="rotate-hint">
                 <span class="phone-icon-wrap">📱</span>
-                <span>Γυρίστε το κινητό οριζόντια για καλύτερη θέαση</span>
             </div>
 
             <div class="columns-container">
@@ -566,7 +555,7 @@ try:
         """
   else:
     html_content += (
-        '<div style="color: white; padding: 20px;">Δεν βρέθηκαν δεδοెంτα.</div>'
+        '<div style="color: white; padding: 20px;">Δεν βρέθηκαν δεδομένα.</div>'
     )
   html_content += "</div>"
 
