@@ -80,16 +80,19 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
   password = st.text_input("Εισάγετε κωδικό διαχειριστή:", type="password")
   if password == "2845":
     st.markdown("---")
-    # Δημιουργία δύο στηλών για τα δύο uploaders
     col_up1, col_up2 = st.columns(2)
 
     with col_up1:
       uploaded_file_1 = st.file_uploader(
-          "Αρχείο για Προϊόν 1 (product1_sales.xlsx):", type=["xlsx"]
+          "Αρχείο για Προϊόν 1 (product1_sales.xlsx):",
+          type=["xlsx"],
+          key="up1",
       )
     with col_up2:
       uploaded_file_2 = st.file_uploader(
-          "Αρχείο για Προϊόν 2 (product2_sales.xlsx):", type=["xlsx"]
+          "Αρχείο για Προϊόν 2 (product2_sales.xlsx):",
+          type=["xlsx"],
+          key="up2",
       )
 
     st.markdown("---")
@@ -136,27 +139,29 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
           horizontal=True,
       )
 
-    # Έλεγχος αν ανέβηκε έστω και ένα αρχείο
-    if uploaded_file_1 is not None or uploaded_file_2 is not None:
-      try:
-        gh_token = st.secrets["GITHUB_TOKEN"]
-        repo_name = st.secrets["REPO_NAME"]
-      except Exception:
-        gh_token, repo_name = None, None
+    st.markdown("---")
+    # Κουμπί υποβολής που περιμένει να πατηθεί αφού μπουν και τα δύο αρχεία
+    submit_btn = st.button("🚀 Ανέβασμα και των 2 αρχείων")
 
-      current_time_str = selected_time.strftime("%H:%M")
-      with open(time_path, "w", encoding="utf-8") as tf:
-        tf.write(current_time_str)
+    if submit_btn:
+      if uploaded_file_1 is not None and uploaded_file_2 is not None:
+        try:
+          gh_token = st.secrets["GITHUB_TOKEN"]
+          repo_name = st.secrets["REPO_NAME"]
+        except Exception:
+          gh_token, repo_name = None, None
 
-      with open(confetti_path, "w", encoding="utf-8") as cf:
-        cf.write(str(confetti_choice == "ΝΑΙ"))
+        current_time_str = selected_time.strftime("%H:%M")
+        with open(time_path, "w", encoding="utf-8") as tf:
+          tf.write(current_time_str)
 
-      with open(cheer_path, "w", encoding="utf-8") as ch:
-        ch.write(str(cheer_choice == "ΝΑΙ"))
+        with open(confetti_path, "w", encoding="utf-8") as cf:
+          cf.write(str(confetti_choice == "ΝΑΙ"))
 
-      updated_files = []
+        with open(cheer_path, "w", encoding="utf-8") as ch:
+          ch.write(str(cheer_choice == "ΝΑΙ"))
 
-      if uploaded_file_1 is not None:
+        # Αποθήκευση και αποστολή Προϊόντος 1
         with open(excel_path_1, "wb") as f:
           f.write(uploaded_file_1.getbuffer())
         if gh_token and repo_name:
@@ -166,9 +171,8 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
               gh_token,
               "Auto-update product1_sales.xlsx",
           )
-        updated_files.append("Προϊόν 1")
 
-      if uploaded_file_2 is not None:
+        # Αποθήκευση και αποστολή Προϊόντος 2
         with open(excel_path_2, "wb") as f:
           f.write(uploaded_file_2.getbuffer())
         if gh_token and repo_name:
@@ -178,24 +182,31 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
               gh_token,
               "Auto-update product2_sales.xlsx",
           )
-        updated_files.append("Προϊόν 2")
 
-      if gh_token and repo_name:
-        upload_to_github(time_path, repo_name, gh_token, "Auto-update upload time")
+        if gh_token and repo_name:
+          upload_to_github(
+              time_path, repo_name, gh_token, "Auto-update upload time"
+          )
 
-      st.success(
-          f"Επιτυχής ενημέρωση για: {', '.join(updated_files)} και συγχρονισμός!"
-      )
-      components.html(
-          """
-                <script>
-                    setTimeout(function() {
-                        window.parent.location.reload();
-                    }, 1500);
-                </script>
-            """,
-          height=0,
-      )
+        st.success(
+            "Και τα δύο αρχεία ανέβηκαν, αποθηκεύτηκαν και συγχρονίστηκαν"
+            " επιτυχώς!"
+        )
+        components.html(
+            """
+                    <script>
+                        setTimeout(function() {
+                            window.parent.location.reload();
+                        }, 1500);
+                    </script>
+                """,
+            height=0,
+        )
+      else:
+        st.warning(
+            "⚠️ Παρακαλώ επιλέξτε αρχείο **και για τα δύο** προϊόντα πριν"
+            " πατήσετε το ανέβασμα!"
+        )
   elif password:
     st.error("Λάθος κωδικός!")
 
