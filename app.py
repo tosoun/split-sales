@@ -343,8 +343,8 @@ try:
 
     @keyframes rotate-phone-smooth {{
         0% {{ transform: rotate(0deg) scale(1); }}
-        35% {{ transform: rotate(-90deg) scale(1.1); }}
-        65% {{ transform: rotate(-90deg) scale(1.1); }}
+        35% {{ transform: rotate(-90deg) scale(1.15); }}
+        65% {{ transform: rotate(-90deg) scale(1.15); }}
         100% {{ transform: rotate(0deg) scale(1); }}
     }}
 
@@ -368,40 +368,35 @@ try:
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
     .content-wrapper {{ padding: 25px; }}
     
-    .top-left-area {{ text-align: left; margin-bottom: 15px; }}
+    /* Header layout with info on left and rotating phone on right, hiding in landscape */
+    .header-area {{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }}
+    
+    .top-left-area {{ text-align: left; }}
     .top-left-text {{ color: #3498db; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
-    /* Mobile turn instruction that hides in landscape orientation */
-    .rotate-hint {{
+    .rotate-hint-right {{
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        margin-bottom: 15px;
     }}
     
     .phone-icon-wrap {{
         display: inline-block;
-        font-size: 26px;
+        font-size: 34px;
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
-        filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.6));
+        filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
     }}
 
-    .rotate-text {{
-        color: #3498db;
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: lowercase;
-        letter-spacing: 0.5px;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    }}
-
-    /* Media query to hide completely when in landscape view (width greater than height) */
     @media (orientation: landscape) {{
-        .rotate-hint {{
+        .rotate-hint-right {{
             display: none !important;
         }}
     }}
@@ -438,15 +433,15 @@ try:
                 <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
             </audio>
 
-            <div class="top-left-area">
-                <div class="top-left-text">ΤΟΜΕΑΣ 3</div>
-                <div class="top-left-subtext">ONLINE SALES</div>
-                <div class="top-left-time">εως: {file_time_str}</div>
-            </div>
-
-            <div class="rotate-hint">
-                <span class="phone-icon-wrap">📱</span>
-                <span class="rotate-text">turn mobile</span>
+            <div class="header-area">
+                <div class="top-left-area">
+                    <div class="top-left-text">ΤΟΜΕΑΣ 3</div>
+                    <div class="top-left-subtext">ONLINE SALES</div>
+                    <div class="top-left-time">εως: {file_time_str}</div>
+                </div>
+                <div class="rotate-hint-right">
+                    <span class="phone-icon-wrap">📱</span>
+                </div>
             </div>
 
             <div class="columns-container">
