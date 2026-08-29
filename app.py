@@ -367,7 +367,7 @@ try:
     
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
     
-    /* Sticky header section: visible ONLY in portrait mode (when height > width) */
+    /* Sticky header section: visible ONLY in landscape mode (when width > height) */
     .sticky-header-wrap {{
         display: none;
         position: sticky;
@@ -380,7 +380,7 @@ try:
         padding: 15px 25px;
     }}
 
-    @media (max-aspect-ratio: 1/1) {{
+    @media (min-aspect-ratio: 1/1) {{
         .sticky-header-wrap {{
             display: block;
         }}
@@ -412,7 +412,7 @@ try:
         filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
     }}
 
-    @media (min-aspect-ratio: 1/1) {{
+    @media (max-aspect-ratio: 1/1) {{
         .rotate-hint-right {{
             display: none !important;
         }}
@@ -428,7 +428,28 @@ try:
     }}
     .product-column {{ width: 100%; }}
 
-    .sub-title {{ color: #3498db; font-size: 18px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }}
+    .sub-title {{ 
+        color: #3498db; 
+        font-size: 18px; 
+        margin-bottom: 15px; 
+        font-weight: 700; 
+        text-transform: uppercase; 
+        letter-spacing: 1px; 
+        text-align: center;
+        position: sticky;
+        top: 0;
+        background: rgba(44, 62, 80, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 10px 0;
+        z-index: 900;
+    }}
+
+    @media (min-aspect-ratio: 1/1) {{
+        .sub-title {{
+            top: 75px; /* Adjust according to top sticky header height */
+        }}
+    }}
     
     .poll-item {{ background: rgba(255, 255, 255, 0.08); padding: 12px 18px; border-radius: 12px; margin-bottom: 12px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.1); }}
     
