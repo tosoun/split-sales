@@ -142,7 +142,6 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
 
     # Αυτόματος έλεγχος και ανέβασμα μόλις συμπληρωθούν και τα δύο αρχεία
     if uploaded_file_1 is not None and uploaded_file_2 is not None:
-      # Αποφεύγουμε τα πολλαπλή συνεχή uploads αν δεν έχουν αλλάξει τα αρχεία κρατώντας hash/id στη session_state
       upload_signature = f"{uploaded_file_1.name}_{uploaded_file_2.name}_{uploaded_file_1.size}_{uploaded_file_2.size}"
       
       if st.session_state.get("last_uploaded_sig") != upload_signature:
@@ -371,8 +370,8 @@ try:
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
-    .columns-container {{ display: flex; gap: 20px; width: 100%; }}
-    .product-column {{ flex: 1; min-width: 0; }}
+    .columns-container {{ display: flex; gap: 20px; width: 100%; flex-wrap: wrap; }}
+    .product-column {{ flex: 1; min-width: 280px; }}
 
     .sub-title {{ color: #3498db; font-size: 18px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }}
     
@@ -389,6 +388,15 @@ try:
     .total-item {{ background: rgba(52, 152, 219, 0.25); border: 1px solid #3498db; }}
     
     .watermark {{ text-align: right; color: rgba(255, 255, 255, 0.2); font-size: 10px; letter-spacing: 1px; margin-top: 15px; margin-right: 5px; text-transform: uppercase; user-select: none; }}
+
+    /* Responsive adjustments for mobile portrait */
+    @media (max-width: 768px) {{
+        .columns-container {{ flex-direction: column; gap: 15px; }}
+        .product-column {{ width: 100%; min-width: 0; }}
+        .content-wrapper {{ padding: 12px; }}
+        .poll-info {{ font-size: 14px; }}
+        .sub-title {{ font-size: 16px; margin-top: 10px; }}
+    }}
     </style>
     
     <div class="main-container">
@@ -552,7 +560,8 @@ try:
         """
 
   html_content += '<div class="watermark">tosoun 2026</div></div></div>'
-  components.html(html_content, height=1350, scrolling=True)
+  # Δίνουμε επαρκές ύψος ώστε να μην κόβεται σε κάθετη διάταξη όταν στοιβάζονται κάθετα
+  components.html(html_content, height=2200, scrolling=True)
 
 except Exception as e:
   st.error(f"Σφάλμα: {e}")
