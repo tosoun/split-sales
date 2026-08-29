@@ -389,8 +389,11 @@ try:
     
     .watermark {{ text-align: right; color: rgba(255, 255, 255, 0.2); font-size: 10px; letter-spacing: 1px; margin-top: 15px; margin-right: 5px; text-transform: uppercase; user-select: none; }}
 
-    /* Responsive adjustments for mobile portrait */
-    @media (max-width: 768px) {{
+    /* Responsive adjustments: 
+       - Σε κινητά σε ΚΑΘΕΤΗ διάταξη (portrait) μπαίνουν το ένα κάτω από το άλλο.
+       - Σε κινητά σε ΟΡΙΖΟΝΤΙΑ διάταξη (landscape) ή σε μεγαλύτερες οθόνες (PC/Tablet) μένουν ΠΛΑΪ-ΠΛΑΪ.
+    */
+    @media (max-width: 900px) and (orientation: portrait) {{
         .columns-container {{ flex-direction: column; gap: 15px; }}
         .product-column {{ width: 100%; min-width: 0; }}
         .content-wrapper {{ padding: 12px; }}
@@ -560,8 +563,7 @@ try:
         """
 
   html_content += '<div class="watermark">tosoun 2026</div></div></div>'
-  # Δίνουμε επαρκές ύψος ώστε να μην κόβεται σε κάθετη διάταξη όταν στοιβάζονται κάθετα
-  components.html(html_content, height=2200, scrolling=True)
+  components.html(html_content, height=1400, scrolling=True)
 
 except Exception as e:
   st.error(f"Σφάλμα: {e}")
