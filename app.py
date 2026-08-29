@@ -374,9 +374,9 @@ try:
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
-    /* Μόνο το κινούμενο εικονίδιο κινητού, εμφανίζεται σε πορτραίτα και εξαφανίζεται αυτόματα σε landscape */
+    /* Εικονίδιο κινητού που κινείται πάντα, χωρίς να εξαφανίζεται σε οριζόντια θέση */
     .rotate-hint {{
-        display: none;
+        display: block;
         text-align: center;
         margin-bottom: 15px;
     }}
@@ -386,12 +386,6 @@ try:
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
         filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.6));
-    }}
-
-    @media screen and (max-width: 768px) and (orientation: portrait) {{
-        .rotate-hint {{
-            display: block;
-        }}
     }}
 
     .columns-container {{ 
