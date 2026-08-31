@@ -410,7 +410,50 @@ try:
         overflow: hidden;
     }}
     
+    .banner-container {{
+        position: relative;
+        width: 100%;
+    }}
+
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
+    
+    .rotate-hint-overlay {{
+        position: absolute;
+        bottom: 8px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 3px 8px;
+        border-radius: 12px;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }}
+    
+    .phone-icon-wrap {{
+        display: inline-block;
+        font-size: 20px;
+        transform-origin: center;
+        animation: rotate-phone-smooth 3.5s infinite ease-in-out;
+        filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.7));
+    }}
+
+    .turn-mobile-text {{
+        font-size: 9px;
+        color: #ecf0f1;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+    }}
+
+    @media (orientation: landscape) {{
+        .rotate-hint-overlay {{
+            display: none !important;
+        }}
+    }}
+
     .content-wrapper {{ padding: 25px; }}
     
     .header-area {{
@@ -425,38 +468,6 @@ try:
     .top-left-subtext {{ color: #2ecc71; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }}
     .top-left-date {{ color: #bdc3c7; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
     .top-left-time {{ color: #95a5a6; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
-
-    .rotate-hint-right {{
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        background: transparent;
-        border: none;
-        padding: 2px 4px;
-    }}
-    
-    .phone-icon-wrap {{
-        display: inline-block;
-        font-size: 22px;
-        transform-origin: center;
-        animation: rotate-phone-smooth 3.5s infinite ease-in-out;
-        filter: drop-shadow(0 0 6px rgba(52, 152, 219, 0.6));
-    }}
-
-    .turn-mobile-text {{
-        font-size: 10px;
-        color: #ecf0f1;
-        text-transform: uppercase;
-        font-weight: 700;
-        letter-spacing: 0.3px;
-        white-space: nowrap;
-    }}
-
-    @media (orientation: landscape) {{
-        .rotate-hint-right {{
-            display: none !important;
-        }}
-    }}
 
     .columns-container {{ 
         display: grid; 
@@ -484,7 +495,13 @@ try:
     </style>
     
     <div class="main-container">
-        <img src="{img_src}" class="banner-img" alt="banner">
+        <div class="banner-container">
+            <img src="{img_src}" class="banner-img" alt="banner">
+            <div class="rotate-hint-overlay">
+                <span class="phone-icon-wrap">📱</span>
+                <span class="turn-mobile-text">TURN MOBILE</span>
+            </div>
+        </div>
         <div class="content-wrapper">
             <audio id="cheerAudio" preload="auto">
                 <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
@@ -496,10 +513,6 @@ try:
                     <div class="top-left-subtext">UPDATE SALES</div>
                     <div class="top-left-date">{file_date_str}</div>
                     <div class="top-left-time">εως: {file_time_str}</div>
-                </div>
-                <div class="rotate-hint-right">
-                    <span class="phone-icon-wrap">📱</span>
-                    <span class="turn-mobile-text">TURN MOBILE</span>
                 </div>
             </div>
 
