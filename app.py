@@ -420,15 +420,12 @@ try:
     .rotate-hint-overlay {{
         position: absolute;
         bottom: 8px;
-        right: 10px;
+        right: 12px;
         display: flex;
         align-items: center;
-        gap: 4px;
-        background: rgba(0, 0, 0, 0.6);
-        padding: 3px 8px;
-        border-radius: 12px;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        gap: 5px;
+        background: transparent;
+        padding: 0;
     }}
     
     .phone-icon-wrap {{
@@ -436,16 +433,17 @@ try:
         font-size: 20px;
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
-        filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.7));
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
     }}
 
     .turn-mobile-text {{
-        font-size: 9px;
-        color: #ecf0f1;
+        font-size: 10px;
+        color: #ffffff;
         text-transform: uppercase;
-        font-weight: 700;
-        letter-spacing: 0.3px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
         white-space: nowrap;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
     }}
 
     @media (orientation: landscape) {{
