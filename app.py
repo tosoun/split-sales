@@ -14,7 +14,11 @@ st.markdown(
     """
     <style>
     .stApp { background-color: #2c3e50 !important; }
-    #MainMenu {visibility: hidden;} header {visibility: hidden;} footer {visibility: hidden;}
+    #MainMenu {visibility: hidden;} 
+    header {visibility: hidden;} 
+    footer {visibility: hidden;}
+    [data-testid="stToolbar"] {visibility: hidden; display: none;}
+    [data-testid="stDecoration"] {visibility: hidden; display: none;}
     div[data-baseweb="select"] > div, .stRadio label p { color: white !important; }
     .block-container { padding: 0rem 0.5rem !important; max-width: 100% !important; }
     </style>
@@ -602,10 +606,7 @@ try:
     html_content += """
         <script>
             setTimeout(function() {
-                // First confetti burst over the image area
                 confetti({ particleCount: 90, spread: 90, origin: { x: 0.5, y: 0.25 } });
-                
-                // Second confetti burst 3 seconds later over the image area
                 setTimeout(function() {
                     confetti({ particleCount: 110, spread: 110, origin: { x: 0.5, y: 0.25 } });
                 }, 3000);
