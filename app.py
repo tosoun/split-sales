@@ -4,6 +4,7 @@ import glob
 import json
 import os
 import pandas as pd
+import requests
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -368,7 +369,6 @@ try:
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
     .content-wrapper {{ padding: 25px; }}
     
-    /* Header layout with info on left and rotating phone on right, hiding in landscape */
     .header-area {{
         display: flex;
         justify-content: space-between;
@@ -581,13 +581,25 @@ try:
   if cheer_enabled:
     html_content += """
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            function playCheer() {
                 const audio = document.getElementById('cheerAudio');
                 if(audio) {
                     audio.volume = 0.5;
-                    audio.play().catch(function() {});
+                    audio.play().then(() => {
+                        window.removeEventListener('click', playCheer);
+                        window.removeEventListener('touchstart', playCheer);
+                    }).catch(function(error) {
+                        console.log("Audio play blocked:", error);
+                    });
                 }
+            }
+
+            window.addEventListener('DOMContentLoaded', function() {
+                playCheer();
             });
+
+            window.addEventListener('click', playCheer, { once: true });
+            window.addEventListener('touchstart', playCheer, { once: true });
         </script>
         """
 
