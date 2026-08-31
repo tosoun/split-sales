@@ -576,10 +576,10 @@ try:
                 // First confetti burst over the image area
                 confetti({ particleCount: 90, spread: 90, origin: { x: 0.5, y: 0.25 } });
                 
-                // Second confetti burst shortly after over the image area
+                // Second confetti burst 3 seconds later over the image area
                 setTimeout(function() {
                     confetti({ particleCount: 110, spread: 110, origin: { x: 0.5, y: 0.25 } });
-                }, 600);
+                }, 3000);
             }, 300);
         </script>
         """
