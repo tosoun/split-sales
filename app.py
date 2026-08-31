@@ -432,6 +432,7 @@ try:
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 4px;
     }}
     
     .phone-icon-wrap {{
@@ -440,6 +441,16 @@ try:
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
         filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
+    }}
+
+    .turn-mobile-text {{
+        font-size: 8px;
+        color: #95a5a6;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
     }}
 
     @media (orientation: landscape) {{
@@ -488,6 +499,7 @@ try:
                     <div class="top-left-time">εως: {file_time_str}</div>
                 </div>
                 <div class="rotate-hint-right">
+                    <span class="turn-mobile-text">turn mobile</span>
                     <span class="phone-icon-wrap">📱</span>
                 </div>
             </div>
