@@ -349,6 +349,11 @@ try:
         100% {{ transform: rotate(0deg) scale(1); }}
     }}
 
+    @keyframes fall-down {{
+        0% {{ transform: translateY(-20px) rotate(0deg); opacity: 1; }}
+        100% {{ transform: translateY(800px) rotate(720deg); opacity: 0; }}
+    }}
+
     body {{ font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; background: transparent; width: 100%; overflow-x: hidden; }}
     
     .main-container {{ 
@@ -363,11 +368,10 @@ try:
         max-width: 100%; 
         margin: 0 auto; 
         text-align: center; 
-        overflow: hidden;
     }}
     
     .banner-img {{ width: 100%; height: auto; display: block; border-radius: 0; margin: 0; padding: 0; }}
-    .content-wrapper {{ padding: 25px; }}
+    .content-wrapper {{ padding: 25px; position: relative; }}
     
     .header-area {{
         display: flex;
@@ -424,11 +428,23 @@ try:
     .total-item {{ background: rgba(52, 152, 219, 0.25); border: 1px solid #3498db; }}
     
     .watermark {{ text-align: right; color: rgba(255, 255, 255, 0.2); font-size: 10px; letter-spacing: 1px; margin-top: 15px; margin-right: 5px; text-transform: uppercase; user-select: none; }}
+    
+    .custom-confetti-piece {{
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f1c40f;
+        top: 0;
+        opacity: 0;
+        z-index: 999;
+        pointer-events: none;
+        animation: fall-down 2s ease-out forwards;
+    }}
     </style>
     
     <div class="main-container">
         <img src="{img_src}" class="banner-img" alt="banner">
-        <div class="content-wrapper">
+        <div class="content-wrapper" id="contentWrapper">
             <audio id="cheerAudio" preload="auto">
                 <source src="https://www.myinstants.com/media/sounds/applause.mp3" type="audio/mpeg">
             </audio>
@@ -572,15 +588,38 @@ try:
   if confetti_enabled:
     html_content += """
         <script>
+            function launchFallbackConfetti() {
+                const wrapper = document.getElementById('contentWrapper');
+                if (!wrapper) return;
+                const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#e67e22'];
+                for (let i = 0; i < 40; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'custom-confetti-piece';
+                    piece.style.left = Math.random() * 100 + '%';
+                    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    piece.style.animationDuration = (1.2 + Math.random() * 1.5) + 's';
+                    piece.style.animationDelay = (Math.random() * 0.4) + 's';
+                    piece.style.borderRadius = Math.random() > 0.5 ? '50%': '0%';
+                    wrapper.appendChild(piece);
+                    setTimeout(() => piece.remove(), 3000);
+                }
+            }
+
             function launchConfetti(xCoord, yCoord) {
                 if (typeof confetti === 'function') {
-                    confetti({
-                        particleCount: 50,
-                        angle: 90,
-                        spread: 100,
-                        origin: { x: xCoord, y: yCoord }
-                    });
+                    try {
+                        confetti({
+                            particleCount: 60,
+                            angle: 90,
+                            spread: 100,
+                            origin: { x: xCoord, y: yCoord }
+                        });
+                        return true;
+                    } catch(e) {
+                        return false;
+                    }
                 }
+                return false;
             }
 
             function triggerConfettiSequence() {
@@ -588,7 +627,7 @@ try:
                 const el2 = document.getElementById('col2-wrap');
                 
                 if (!el1 || !el2) {
-                    setTimeout(triggerConfettiSequence, 100);
+                    setTimeout(triggerConfettiSequence, 150);
                     return;
                 }
 
@@ -601,23 +640,27 @@ try:
                 const x2 = (r2.left + r2.width / 2) / window.innerWidth;
                 const y2 = (r2.top + r2.height / 3) / window.innerHeight;
 
-                // 1η φορά (Στήλη 1 & Στήλη 2 ταυτόχρονα)
-                launchConfetti(x1, y1);
+                let success = launchConfetti(x1, y1);
                 launchConfetti(x2, y2);
 
-                // 2η φορά μετά από 500ms (Στήλη 1 & Στήλη 2 ταυτόχρονα)
+                if (!success) {
+                    launchFallbackConfetti();
+                }
+
                 setTimeout(function() {
-                    launchConfetti(x1, y1);
+                    let success2 = launchConfetti(x1, y1);
                     launchConfetti(x2, y2);
-                }, 500);
+                    if (!success2) {
+                        launchFallbackConfetti();
+                    }
+                }, 600);
             }
 
             window.addEventListener('load', function() {
-                setTimeout(triggerConfettiSequence, 300);
+                setTimeout(triggerConfettiSequence, 400);
             });
             
-            // Άμεση εκτέλεση σε περίπτωση που το load έχει ήδη προσπεραστεί
-            setTimeout(triggerConfettiSequence, 400);
+            setTimeout(triggerConfettiSequence, 500);
         </script>
         """
 
@@ -647,7 +690,7 @@ try:
         """
 
   html_content += '<div class="watermark">tosoun 2026</div></div></div>'
-  components.html(html_content, height=1400, scrolling=True)
+  components.html(html_content, height=2200, scrolling=True)
 
 except Exception as e:
   st.error(f"Σφάλμα: {e}")
