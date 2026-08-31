@@ -573,7 +573,13 @@ try:
     html_content += """
         <script>
             setTimeout(function() {
-                confetti({ particleCount: 100, spread: 80, origin: { x: 0.5, y: 0.6 } });
+                // First confetti burst over the image area
+                confetti({ particleCount: 90, spread: 90, origin: { x: 0.5, y: 0.25 } });
+                
+                // Second confetti burst shortly after over the image area
+                setTimeout(function() {
+                    confetti({ particleCount: 110, spread: 110, origin: { x: 0.5, y: 0.25 } });
+                }, 600);
             }, 300);
         </script>
         """
