@@ -24,10 +24,8 @@ st.markdown(
     </style>
     
     <script>
-    // Αυτόματη απόκρυψη του κουμπιού Manage app μόλις φορτώσει η σελίδα
     function removeManageButton() {
         const doc = window.parent.document;
-        const manageBtn = doc.querySelector('[kind="header"]');
         const buttons = doc.querySelectorAll('button');
         buttons.forEach(btn => {
             if (btn.innerText.includes('Manage app') || btn.innerHTML.includes('Manage')) {
@@ -388,11 +386,10 @@ try:
         100% {{ opacity: 1; color: #2ecc71; text-shadow: 0 0 12px rgba(46, 204, 113, 0.7); }}
     }}
 
-    @keyframes rotate-phone-smooth {{
-        0% {{ transform: rotate(0deg) scale(1); }}
-        35% {{ transform: rotate(-90deg) scale(1.15); }}
-        65% {{ transform: rotate(-90deg) scale(1.15); }}
-        100% {{ transform: rotate(0deg) scale(1); }}
+    @keyframes pulse-icon {{
+        0% {{ transform: scale(1); opacity: 0.9; }}
+        50% {{ transform: scale(1.12); opacity: 1; filter: drop-shadow(0 0 12px rgba(52, 152, 219, 0.9)); }}
+        100% {{ transform: scale(1); opacity: 0.9; }}
     }}
 
     body {{ font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; background: transparent; width: 100%; overflow-x: hidden; }}
@@ -423,34 +420,35 @@ try:
     }}
     
     .top-left-area {{ text-align: left; }}
-    .top-left-text {{ color: #3498db; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
-    .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
-    .top-left-date {{ color: #95a5a6; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
-    .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
+    .top-left-text {{ color: #3498db; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
+    .top-left-subtext {{ color: #2ecc71; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }}
+    .top-left-date {{ color: #bdc3c7; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
+    .top-left-time {{ color: #95a5a6; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
     .rotate-hint-right {{
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 4px;
+        gap: 6px;
+        background: rgba(52, 152, 219, 0.15);
+        border: 1px solid rgba(52, 152, 219, 0.4);
+        padding: 6px 12px;
+        border-radius: 20px;
     }}
     
     .phone-icon-wrap {{
         display: inline-block;
-        font-size: 34px;
-        transform-origin: center;
-        animation: rotate-phone-smooth 3.5s infinite ease-in-out;
-        filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
+        font-size: 20px;
+        animation: pulse-icon 2s infinite ease-in-out;
+        filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.7));
     }}
 
     .turn-mobile-text {{
-        font-size: 8px;
-        color: #95a5a6;
+        font-size: 11px;
+        color: #ecf0f1;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.5px;
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
+        white-space: nowrap;
     }}
 
     @media (orientation: landscape) {{
@@ -499,8 +497,8 @@ try:
                     <div class="top-left-time">εως: {file_time_str}</div>
                 </div>
                 <div class="rotate-hint-right">
-                    <span class="turn-mobile-text">turn mobile</span>
                     <span class="phone-icon-wrap">📱</span>
+                    <span class="turn-mobile-text">TURN MOBILE</span>
                 </div>
             </div>
 
