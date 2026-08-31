@@ -483,7 +483,7 @@ try:
             <div class="header-area">
                 <div class="top-left-area">
                     <div class="top-left-text">ΤΟΜΕΑΣ 3</div>
-                    <div class="top-left-subtext">ONLINE SALES</div>
+                    <div class="top-left-subtext">UPDATE SALES</div>
                     <div class="top-left-date">{file_date_str}</div>
                     <div class="top-left-time">εως: {file_time_str}</div>
                 </div>
