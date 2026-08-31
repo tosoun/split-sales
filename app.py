@@ -386,10 +386,11 @@ try:
         100% {{ opacity: 1; color: #2ecc71; text-shadow: 0 0 12px rgba(46, 204, 113, 0.7); }}
     }}
 
-    @keyframes pulse-icon {{
-        0% {{ transform: scale(1); opacity: 0.9; }}
-        50% {{ transform: scale(1.12); opacity: 1; filter: drop-shadow(0 0 12px rgba(52, 152, 219, 0.9)); }}
-        100% {{ transform: scale(1); opacity: 0.9; }}
+    @keyframes rotate-phone-smooth {{
+        0% {{ transform: rotate(0deg) scale(1); }}
+        35% {{ transform: rotate(-90deg) scale(1.15); }}
+        65% {{ transform: rotate(-90deg) scale(1.15); }}
+        100% {{ transform: rotate(0deg) scale(1); }}
     }}
 
     body {{ font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; background: transparent; width: 100%; overflow-x: hidden; }}
@@ -437,13 +438,14 @@ try:
     
     .phone-icon-wrap {{
         display: inline-block;
-        font-size: 20px;
-        animation: pulse-icon 2s infinite ease-in-out;
-        filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.7));
+        font-size: 34px;
+        transform-origin: center;
+        animation: rotate-phone-smooth 3.5s infinite ease-in-out;
+        filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
     }}
 
     .turn-mobile-text {{
-        font-size: 11px;
+        font-size: 12px;
         color: #ecf0f1;
         text-transform: uppercase;
         font-weight: 700;
