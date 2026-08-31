@@ -572,50 +572,52 @@ try:
   if confetti_enabled:
     html_content += """
         <script>
-            function fireConfettiForElement(elementId) {
-                const elem = document.getElementById(elementId);
-                if (!elem) return;
-                const rect = elem.getBoundingClientRect();
-                
-                // Υπολογισμός θέσης X και Y ως ποσοστά (0.0 εως 1.0) της οθόνης
-                const xPos = (rect.left + rect.width / 2) / window.innerWidth;
-                const yPos = (rect.top + rect.height / 3) / window.innerHeight;
-
-                // Ρυθμίσεις για οριζόντια διάταξη (angle 90, spread 100)
-                const confSettings = {
-                    particleCount: 50,
-                    angle: 90,
-                    spread: 100,
-                    origin: { x: xPos, y: yPos }
-                };
-
-                // Ρίψη 1η
-                confetti(confSettings);
-
-                // Ρίψη 2η μετά από 400ms
-                setTimeout(function() {
-                    confetti(confSettings);
-                }, 400);
+            function launchConfetti(xCoord, yCoord) {
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 50,
+                        angle: 90,
+                        spread: 100,
+                        origin: { x: xCoord, y: yCoord }
+                    });
+                }
             }
 
-            function triggerAllConfetti() {
-                if (typeof confetti === 'undefined') {
-                    setTimeout(triggerAllConfetti, 200);
+            function triggerConfettiSequence() {
+                const el1 = document.getElementById('col1-wrap');
+                const el2 = document.getElementById('col2-wrap');
+                
+                if (!el1 || !el2) {
+                    setTimeout(triggerConfettiSequence, 100);
                     return;
                 }
+
+                const r1 = el1.getBoundingClientRect();
+                const r2 = el2.getBoundingClientRect();
                 
-                // Εκκίνηση για Στήλη 1 και Στήλη 2
-                fireConfettiForElement('col1-wrap');
-                fireConfettiForElement('col2-wrap');
+                const x1 = (r1.left + r1.width / 2) / window.innerWidth;
+                const y1 = (r1.top + r1.height / 3) / window.innerHeight;
+
+                const x2 = (r2.left + r2.width / 2) / window.innerWidth;
+                const y2 = (r2.top + r2.height / 3) / window.innerHeight;
+
+                // 1η φορά (Στήλη 1 & Στήλη 2 ταυτόχρονα)
+                launchConfetti(x1, y1);
+                launchConfetti(x2, y2);
+
+                // 2η φορά μετά από 500ms (Στήλη 1 & Στήλη 2 ταυτόχρονα)
+                setTimeout(function() {
+                    launchConfetti(x1, y1);
+                    launchConfetti(x2, y2);
+                }, 500);
             }
 
-            if (document.readyState === 'complete') {
-                setTimeout(triggerAllConfetti, 400);
-            } else {
-                window.addEventListener('load', function() {
-                    setTimeout(triggerAllConfetti, 400);
-                });
-            }
+            window.addEventListener('load', function() {
+                setTimeout(triggerConfettiSequence, 300);
+            });
+            
+            // Άμεση εκτέλεση σε περίπτωση που το load έχει ήδη προσπεραστεί
+            setTimeout(triggerConfettiSequence, 400);
         </script>
         """
 
