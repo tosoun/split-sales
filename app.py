@@ -25,6 +25,7 @@ st.markdown(
 excel_path_1 = "product1_sales.xlsx"
 excel_path_2 = "product2_sales.xlsx"
 time_path = "upload_time.txt"
+date_path = "upload_date.txt"
 confetti_path = "confetti_status.txt"
 cheer_path = "cheer_status.txt"
 
@@ -111,7 +112,17 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
     if "selected_half_hour" not in st.session_state:
       st.session_state.selected_half_hour = default_time
 
-    col_time, col_confetti, col_cheer = st.columns([1.2, 1, 1])
+    if "selected_report_date" not in st.session_state:
+      st.session_state.selected_report_date = datetime.date.today()
+
+    col_date, col_time, col_confetti, col_cheer = st.columns([1.2, 1.2, 1, 1])
+
+    with col_date:
+      selected_date = st.date_input(
+          "Ημερομηνία αναφοράς:",
+          value=st.session_state.selected_report_date,
+      )
+      st.session_state.selected_report_date = selected_date
 
     with col_time:
       selected_time = st.selectbox(
@@ -151,8 +162,13 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
           gh_token, repo_name = None, None
 
         current_time_str = selected_time.strftime("%H:%M")
+        current_date_str = selected_date.strftime("%d/%m/%Y")
+
         with open(time_path, "w", encoding="utf-8") as tf:
           tf.write(current_time_str)
+
+        with open(date_path, "w", encoding="utf-8") as df_file:
+          df_file.write(current_date_str)
 
         with open(confetti_path, "w", encoding="utf-8") as cf:
           cf.write(str(confetti_choice == "ΝΑΙ"))
@@ -183,6 +199,9 @@ with st.expander("⚙️ Διαχείριση Αρχείων (Admin)"):
         if gh_token and repo_name:
           upload_to_github(
               time_path, repo_name, gh_token, "Auto-update upload time"
+          )
+          upload_to_github(
+              date_path, repo_name, gh_token, "Auto-update upload date"
           )
 
         st.session_state["last_uploaded_sig"] = upload_signature
@@ -310,6 +329,14 @@ if os.path.exists(time_path):
   except Exception:
     pass
 
+file_date_str = datetime.date.today().strftime("%d/%m/%Y")
+if os.path.exists(date_path):
+  try:
+    with open(date_path, "r", encoding="utf-8") as df_file:
+      file_date_str = df_file.read().strip()
+  except Exception:
+    pass
+
 title_1, df_stores_1, total_sum_1, max_sales_1 = process_sales_df(
     load_data(excel_path_1)
 )
@@ -380,6 +407,7 @@ try:
     .top-left-text {{ color: #3498db; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-subtext {{ color: #2ecc71; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }}
     .top-left-time {{ color: #7f8c8d; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
+    .top-left-date {{ color: #95a5a6; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }}
 
     .rotate-hint-right {{
         display: flex;
@@ -438,6 +466,7 @@ try:
                     <div class="top-left-text">ΤΟΜΕΑΣ 3</div>
                     <div class="top-left-subtext">ONLINE SALES</div>
                     <div class="top-left-time">εως: {file_time_str}</div>
+                    <div class="top-left-date">{file_date_str}</div>
                 </div>
                 <div class="rotate-hint-right">
                     <span class="phone-icon-wrap">📱</span>
