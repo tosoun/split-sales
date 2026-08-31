@@ -572,37 +572,50 @@ try:
   if confetti_enabled:
     html_content += """
         <script>
-            function fireColumnConfetti(columnId) {
-                const elem = document.getElementById(columnId);
+            function fireConfettiForElement(elementId) {
+                const elem = document.getElementById(elementId);
                 if (!elem) return;
                 const rect = elem.getBoundingClientRect();
-                const containerRect = document.body.getBoundingClientRect();
                 
-                // Υπολογισμός κέντρου της στήλης σε ποσοστό 0.0 έως 1.0 σε σχέση με το πλάτος της οθόνης
-                const xCenter = (rect.left + rect.width / 2) / window.innerWidth;
+                // Υπολογισμός θέσης X και Y ως ποσοστά (0.0 εως 1.0) της οθόνης
+                const xPos = (rect.left + rect.width / 2) / window.innerWidth;
                 const yPos = (rect.top + rect.height / 3) / window.innerHeight;
 
-                // Οριζόντια διάταξη (spread: 100, angle: 90 / spread)
-                confetti({
+                // Ρυθμίσεις για οριζόντια διάταξη (angle 90, spread 100)
+                const confSettings = {
                     particleCount: 50,
                     angle: 90,
-                    spread: 90,
-                    origin: { x: xCenter, y: yPos }
-                });
+                    spread: 100,
+                    origin: { x: xPos, y: yPos }
+                };
+
+                // Ρίψη 1η
+                confetti(confSettings);
+
+                // Ρίψη 2η μετά από 400ms
+                setTimeout(function() {
+                    confetti(confSettings);
+                }, 400);
             }
 
-            setTimeout(function() {
-                // 1η φορά για τη Στήλη 1
-                fireColumnConfetti('col1-wrap');
-                // 1η φορά για τη Στήλη 2
-                fireColumnConfetti('col2-wrap');
+            function triggerAllConfetti() {
+                if (typeof confetti === 'undefined') {
+                    setTimeout(triggerAllConfetti, 200);
+                    return;
+                }
+                
+                // Εκκίνηση για Στήλη 1 και Στήλη 2
+                fireConfettiForElement('col1-wrap');
+                fireConfettiForElement('col2-wrap');
+            }
 
-                // 2η φορά μετά από 400ms
-                setTimeout(function() {
-                    fireColumnConfetti('col1-wrap');
-                    fireColumnConfetti('col2-wrap');
-                }, 400);
-            }, 300);
+            if (document.readyState === 'complete') {
+                setTimeout(triggerAllConfetti, 400);
+            } else {
+                window.addEventListener('load', function() {
+                    setTimeout(triggerAllConfetti, 400);
+                });
+            }
         </script>
         """
 
