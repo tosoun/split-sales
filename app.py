@@ -407,7 +407,7 @@ try:
         gap: 20px; 
         width: 100%; 
     }}
-    .product-column {{ width: 100%; }}
+    .product-column {{ width: 100%; position: relative; }}
 
     .sub-title {{ color: #3498db; font-size: 18px; margin-bottom: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }}
     
@@ -448,7 +448,7 @@ try:
     """
 
   # --- ΣΤΗΛΗ 1 ---
-  html_content += '<div class="product-column">'
+  html_content += '<div class="product-column" id="col1-wrap">'
   html_content += f'<div class="sub-title">{title_1}</div>'
 
   if not df_stores_1.empty:
@@ -508,7 +508,7 @@ try:
   html_content += "</div>"
 
   # --- ΣΤΗΛΗ 2 ---
-  html_content += '<div class="product-column">'
+  html_content += '<div class="product-column" id="col2-wrap">'
   html_content += f'<div class="sub-title">{title_2}</div>'
 
   if not df_stores_2.empty:
@@ -572,8 +572,36 @@ try:
   if confetti_enabled:
     html_content += """
         <script>
+            function fireColumnConfetti(columnId) {
+                const elem = document.getElementById(columnId);
+                if (!elem) return;
+                const rect = elem.getBoundingClientRect();
+                const containerRect = document.body.getBoundingClientRect();
+                
+                // Υπολογισμός κέντρου της στήλης σε ποσοστό 0.0 έως 1.0 σε σχέση με το πλάτος της οθόνης
+                const xCenter = (rect.left + rect.width / 2) / window.innerWidth;
+                const yPos = (rect.top + rect.height / 3) / window.innerHeight;
+
+                // Οριζόντια διάταξη (spread: 100, angle: 90 / spread)
+                confetti({
+                    particleCount: 50,
+                    angle: 90,
+                    spread: 90,
+                    origin: { x: xCenter, y: yPos }
+                });
+            }
+
             setTimeout(function() {
-                confetti({ particleCount: 100, spread: 80, origin: { x: 0.5, y: 0.6 } });
+                // 1η φορά για τη Στήλη 1
+                fireColumnConfetti('col1-wrap');
+                // 1η φορά για τη Στήλη 2
+                fireColumnConfetti('col2-wrap');
+
+                // 2η φορά μετά από 400ms
+                setTimeout(function() {
+                    fireColumnConfetti('col1-wrap');
+                    fireColumnConfetti('col2-wrap');
+                }, 400);
             }, 300);
         </script>
         """
