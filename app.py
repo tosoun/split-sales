@@ -22,6 +22,21 @@ st.markdown(
     div[data-baseweb="select"] > div, .stRadio label p { color: white !important; }
     .block-container { padding: 0rem 0.5rem !important; max-width: 100% !important; }
     </style>
+    
+    <script>
+    // Αυτόματη απόκρυψη του κουμπιού Manage app μόλις φορτώσει η σελίδα
+    function removeManageButton() {
+        const doc = window.parent.document;
+        const manageBtn = doc.querySelector('[kind="header"]');
+        const buttons = doc.querySelectorAll('button');
+        buttons.forEach(btn => {
+            if (btn.innerText.includes('Manage app') || btn.innerHTML.includes('Manage')) {
+                btn.style.display = 'none';
+            }
+        });
+    }
+    setInterval(removeManageButton, 500);
+    </script>
 """,
     unsafe_allow_html=True,
 )
