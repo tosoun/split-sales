@@ -429,27 +429,26 @@ try:
     .rotate-hint-right {{
         display: flex;
         align-items: center;
-        gap: 6px;
-        background: rgba(52, 152, 219, 0.15);
-        border: 1px solid rgba(52, 152, 219, 0.4);
-        padding: 6px 12px;
-        border-radius: 20px;
+        gap: 4px;
+        background: transparent;
+        border: none;
+        padding: 2px 4px;
     }}
     
     .phone-icon-wrap {{
         display: inline-block;
-        font-size: 34px;
+        font-size: 22px;
         transform-origin: center;
         animation: rotate-phone-smooth 3.5s infinite ease-in-out;
-        filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.7));
+        filter: drop-shadow(0 0 6px rgba(52, 152, 219, 0.6));
     }}
 
     .turn-mobile-text {{
-        font-size: 12px;
+        font-size: 10px;
         color: #ecf0f1;
         text-transform: uppercase;
         font-weight: 700;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.3px;
         white-space: nowrap;
     }}
 
@@ -652,7 +651,7 @@ try:
                         window.removeEventListener('click', playCheer);
                         window.removeEventListener('touchstart', playCheer);
                     }).catch(function(error) {
-                        console.log("Audio play blocked:", error);
+                        console.log("Audio play blocked:", error.message);
                     });
                 }
             }
